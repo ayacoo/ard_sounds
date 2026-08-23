@@ -25,7 +25,7 @@ class ArdSoundsPreviewRenderer extends StandardContentPreviewRenderer
             $content .= '<br/><br/><h6><strong>Assets</strong></h6>';
             $fileReferences = BackendUtility::resolveFileReferences('tt_content', 'assets', $row);
             foreach ($fileReferences as $fileReferenceObject) {
-                if ($fileReferenceObject->getProperty('hidden')) {
+                if ((bool)$fileReferenceObject->getProperty('hidden')) {
                     continue;
                 }
                 $fileObject = $fileReferenceObject->getOriginalFile();

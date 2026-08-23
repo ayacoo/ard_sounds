@@ -49,7 +49,7 @@ class ArdSoundsHelper extends AbstractOEmbedHelper
     {
         $metaData = [];
         $oEmbed = $this->getOEmbedData($this->getOnlineMediaId($file));
-        if ($oEmbed) {
+        if ($oEmbed !== null && $oEmbed !== []) {
             $metaData['width'] = 640;
             $metaData['height'] = 185;
             $metaData['title'] = $oEmbed['title'] ?? '';
@@ -72,7 +72,7 @@ class ArdSoundsHelper extends AbstractOEmbedHelper
         $mediaId = $this->getOnlineMediaId($file);
         $temporaryFileName = $this->getTempFolderPath() . $file->getExtension() . '_' . md5($mediaId) . '.jpg';
 
-        if (!empty($previewImageUrl)) {
+        if ($previewImageUrl !== '') {
             $previewImage = GeneralUtility::getUrl($previewImageUrl);
             if ($previewImage !== false && $previewImage !== '') {
                 file_put_contents($temporaryFileName, $previewImage);
