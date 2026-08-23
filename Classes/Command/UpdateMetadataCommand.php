@@ -15,7 +15,6 @@ use TYPO3\CMS\Core\Resource\File;
 use TYPO3\CMS\Core\Resource\Index\MetaDataRepository;
 use TYPO3\CMS\Core\Resource\ProcessedFileRepository;
 use TYPO3\CMS\Core\Resource\ResourceFactory;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 class UpdateMetadataCommand extends Command
 {
@@ -35,7 +34,8 @@ class UpdateMetadataCommand extends Command
         protected FileRepository $fileRepository,
         protected MetaDataRepository $metadataRepository,
         protected ResourceFactory $resourceFactory,
-        protected ProcessedFileRepository $processedFileRepository
+        protected ProcessedFileRepository $processedFileRepository,
+        protected ArdSoundsHelper $ardSoundsHelper
     ) {
         parent::__construct();
     }
@@ -45,12 +45,10 @@ class UpdateMetadataCommand extends Command
         $io = new SymfonyStyle($input, $output);
         $limit = (int)($input->getOption('limit') ?? 10);
 
-        $ardSoundsHelper = GeneralUtility::makeInstance(ArdSoundsHelper::class, 'ardsounds');
-
         $episodes = $this->fileRepository->getVideosByFileExtension('ardsounds', $limit);
         foreach ($episodes as $episode) {
             $file = $this->resourceFactory->getFileObject($episode['uid']);
-            $metaData = $ardSoundsHelper->getMetaData($file);
+            $metaData = $this->ardSoundsHelper->getMetaData($file);
             if (!empty($metaData)) {
                 $newMetaData = [
                     'width' => (int)$metaData['width'],
@@ -61,7 +59,7 @@ class UpdateMetadataCommand extends Command
                     $newMetaData['title'] = $metaData['title'];
                 }
                 $this->metadataRepository->update($file->getUid(), $newMetaData);
-                $this->handlePreviewImage($ardSoundsHelper, $file);
+                $this->handlePreviewImage($this->ardSoundsHelper, $file);
                 $io->success($file->getProperty('title') . '(UID: ' . $file->getUid() . ') was processed');
             }
         }
