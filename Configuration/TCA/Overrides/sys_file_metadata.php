@@ -1,6 +1,6 @@
 <?php
 
-defined('TYPO3') or die();
+defined('TYPO3') || die();
 
 $tempColumns = [
     'ardsounds_thumbnail' => [

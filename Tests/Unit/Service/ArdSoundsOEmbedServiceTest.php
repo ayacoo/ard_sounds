@@ -28,7 +28,8 @@ final class ArdSoundsOEmbedServiceTest extends UnitTestCase
         . '"identifier":"16414373","name":"Per Mertesacker - Ich hatte den Ehrgeiz, es den Leuten zu zeigen","url":'
         . '"https://www.ardsounds.de/episode/urn:ard:episode:96fa3cc508a2d92f/","description":'
         . '"Der ehemalige Fußballprofi und Weltmeister spricht mit Arnd Zeigler.","image":'
-        . '"https://api.ardmediathek.de/image-service/images/urn:ard:image:b09b0a010b3fd4f6?w=1280&ch=7b5a89b64060f97c",'
+        . '"https://api.ardmediathek.de/image-service/images/'
+        . 'urn:ard:image:b09b0a010b3fd4f6?w=1280&ch=7b5a89b64060f97c",'
         . '"datePublished":"2026-05-15T12:00:09+02:00","timeRequired":"3687","duration":"PT1H61M27S",'
         . '"associatedMedia":{"@type":"MediaObject","contentUrl":'
         . '"https://wdrmedien-a.akamaihd.net/media/p/public/weltweit/2026/05/13/'
@@ -50,7 +51,8 @@ final class ArdSoundsOEmbedServiceTest extends UnitTestCase
             $result['title']
         );
         self::assertSame(
-            'https://api.ardmediathek.de/image-service/images/urn:ard:image:b09b0a010b3fd4f6?w=1280&ch=7b5a89b64060f97c',
+            'https://api.ardmediathek.de/image-service/images/'
+            . 'urn:ard:image:b09b0a010b3fd4f6?w=1280&ch=7b5a89b64060f97c',
             $result['thumbnail_url']
         );
         self::assertSame(640, $result['width']);
