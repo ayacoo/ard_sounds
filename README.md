@@ -163,6 +163,7 @@ https://docs.typo3.org/m/typo3/reference-coreapi/main/en-us/ApiOverview/ContentS
 
 | ard_sounds | TYPO3 | PHP       | Support / Development                |
 |------------|-------|-----------|---------------------------------------|
+| 2.x        | 14.x  | 8.2 - 8.5 | features, bugfixes, security updates |
 | 1.x        | 13.x  | 8.2 - 8.5 | features, bugfixes, security updates |
 
 ### 4.2 Release Management

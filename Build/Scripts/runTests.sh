@@ -151,7 +151,7 @@ restoreComposerFiles() {
 
 loadHelp() {
     # Load help text into $HELP
-    read -r -d '' HELP <<EOF
+    read -r -d '' HELP <<'EOF'
 TYPO3 core test runner. Execute unit, functional and other test suites in
 a container based test environment. Handles execution of single test files,
 sending xdebug information to a local IDE and more.
@@ -226,10 +226,10 @@ Options:
             - 17    maintained until 2029-11-08
             - 18    maintained until 2029-11-14
 
-    -t <13>
+    -t <14>
         Only with -s composerInstall|composerInstallMin|composerInstallMax
         Specifies the TYPO3 CORE Version to be used
-            - 13.4: use TYPO3 v13 (default)
+            - 14.0: use TYPO3 v14 (default)
 
     -p <8.2|8.3|8.4|8.5>
         Specifies the PHP minor version to be used
@@ -309,7 +309,7 @@ ROOT_DIR="${PWD}"
 
 # Option defaults
 TEST_SUITE=""
-TYPO3_VERSION="13"
+TYPO3_VERSION="14"
 DBMS="sqlite"
 DBMS_VERSION=""
 PHP_VERSION="8.3"
@@ -319,7 +319,7 @@ EXTRA_TEST_OPTIONS=""
 CGLCHECK_DRY_RUN=0
 DATABASE_DRIVER=""
 CONTAINER_BIN=""
-COMPOSER_ROOT_VERSION="13.4.20"
+COMPOSER_ROOT_VERSION="14.0.1"
 CONTAINER_INTERACTIVE="-it --init"
 HOST_UID=$(id -u)
 HOST_PID=$(id -g)
@@ -368,7 +368,7 @@ while getopts "a:b:s:d:i:p:e:t:xy:nhu" OPT; do
             ;;
         t)
             TYPO3_VERSION=${OPTARG}
-            if ! [[ ${TYPO3_VERSION} =~ ^(13)$ ]]; then
+            if ! [[ ${TYPO3_VERSION} =~ ^(14)$ ]]; then
                 INVALID_OPTIONS+=("-t ${OPTARG}")
             fi
             ;;
@@ -506,9 +506,9 @@ case ${TEST_SUITE} in
         cleanComposer
         stashComposerFiles
         ${CONTAINER_BIN} run ${CONTAINER_COMMON_PARAMS} --name composer-install-highest-${SUFFIX} -e COMPOSER_CACHE_DIR=.cache/composer -e COMPOSER_ROOT_VERSION=${COMPOSER_ROOT_VERSION} ${IMAGE_PHP} /bin/bash -c "
-            if [ ${TYPO3_VERSION} -eq 13 ]; then
+            if [ ${TYPO3_VERSION} -eq 14 ]; then
               composer require --no-ansi --no-interaction --no-progress --no-install \
-                typo3/cms-core:^13.4 || exit 1
+                typo3/cms-core:^14.0 || exit 1
             fi
             composer update --no-progress --no-interaction  || exit 1
             composer show || exit 1
@@ -520,9 +520,9 @@ case ${TEST_SUITE} in
         cleanComposer
         stashComposerFiles
         ${CONTAINER_BIN} run ${CONTAINER_COMMON_PARAMS} --name composer-install-lowest-${SUFFIX} -e COMPOSER_CACHE_DIR=.cache/composer -e COMPOSER_ROOT_VERSION=${COMPOSER_ROOT_VERSION} ${IMAGE_PHP} /bin/bash -c "
-            if [ ${TYPO3_VERSION} -eq 13 ]; then
+            if [ ${TYPO3_VERSION} -eq 14 ]; then
               composer require --no-ansi --no-interaction --no-progress --no-install \
-                typo3/cms-core:^13.4 || exit 1
+                typo3/cms-core:^14.0 || exit 1
             fi
             composer update --no-ansi --no-interaction --no-progress --with-dependencies --prefer-lowest || exit 1
             composer show || exit 1

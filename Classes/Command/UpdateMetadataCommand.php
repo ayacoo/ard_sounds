@@ -6,6 +6,7 @@ namespace Ayacoo\ArdSounds\Command;
 
 use Ayacoo\ArdSounds\Domain\Repository\FileRepository;
 use Ayacoo\ArdSounds\Helper\ArdSoundsHelper;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -15,7 +16,9 @@ use TYPO3\CMS\Core\Resource\File;
 use TYPO3\CMS\Core\Resource\Index\MetaDataRepository;
 use TYPO3\CMS\Core\Resource\ProcessedFileRepository;
 use TYPO3\CMS\Core\Resource\ResourceFactory;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
+#[AsCommand('ardsounds:updateMetadata', 'Updates the ARD Sounds metadata')]
 class UpdateMetadataCommand extends Command
 {
     protected function configure(): void
@@ -34,8 +37,7 @@ class UpdateMetadataCommand extends Command
         protected FileRepository $fileRepository,
         protected MetaDataRepository $metadataRepository,
         protected ResourceFactory $resourceFactory,
-        protected ProcessedFileRepository $processedFileRepository,
-        protected ArdSoundsHelper $ardSoundsHelper
+        protected ProcessedFileRepository $processedFileRepository
     ) {
         parent::__construct();
     }
@@ -45,11 +47,13 @@ class UpdateMetadataCommand extends Command
         $io = new SymfonyStyle($input, $output);
         $limit = (int)($input->getOption('limit') ?? 10);
 
+        $ardSoundsHelper = GeneralUtility::makeInstance(ArdSoundsHelper::class, 'ardsounds');
+
         $episodes = $this->fileRepository->getVideosByFileExtension('ardsounds', $limit);
         foreach ($episodes as $episode) {
             $file = $this->resourceFactory->getFileObject($episode['uid']);
-            $metaData = $this->ardSoundsHelper->getMetaData($file);
-            if (!empty($metaData)) {
+            $metaData = $ardSoundsHelper->getMetaData($file);
+            if ($metaData !== []) {
                 $newMetaData = [
                     'width' => (int)$metaData['width'],
                     'height' => (int)$metaData['height'],
@@ -59,7 +63,7 @@ class UpdateMetadataCommand extends Command
                     $newMetaData['title'] = $metaData['title'];
                 }
                 $this->metadataRepository->update($file->getUid(), $newMetaData);
-                $this->handlePreviewImage($this->ardSoundsHelper, $file);
+                $this->handlePreviewImage($ardSoundsHelper, $file);
                 $io->success($file->getProperty('title') . '(UID: ' . $file->getUid() . ') was processed');
             }
         }
