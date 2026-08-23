@@ -1,0 +1,5 @@
+plugin.tx_ardsounds {
+    settings {
+        privacy = {$plugin.tx_ardsounds.settings.privacy}
+    }
+}

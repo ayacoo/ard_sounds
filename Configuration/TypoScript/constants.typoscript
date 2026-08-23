@@ -1,0 +1,6 @@
+plugin.tx_ardsounds {
+    settings {
+        # cat=plugin.tx_ardsounds//a; type=boolean; label=Privacy (Use data-src instead of src)
+        privacy = 0
+    }
+}
